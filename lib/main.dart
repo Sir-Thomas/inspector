@@ -1,32 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:inspector/firebase_options.dart';
+import 'package:inspector/screens/login_screen.dart';
+import 'package:inspector/screens/player_list_screen.dart';
+import 'package:inspector/screens/splash_screen.dart';
+import 'package:inspector/services/firestore_service.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const SignUpApp());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const InspectorApp());
+}
 
-class SignUpApp extends StatelessWidget {
-  const SignUpApp({super.key});
+class InspectorApp extends StatelessWidget {
+  const InspectorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        '/': (context) => const SignUpScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (_) => FirestoreService(),
+        )
+      ],
+      child: MaterialApp(routes: {
+        '/': (context) => SplashScreen(child: LoginScreen()),
+        LoginScreen.routeName: (context) => LoginScreen(),
+        PlayerListScreen.routeName: (context) =>
+            PlayerListScreen(cname: "tommy"),
+      }),
     );
   }
 }
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String name = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    FirestoreService firestoreService =
+        Provider.of<FirestoreService>(context, listen: false);
+    () async {
+      await firestoreService.getCharactersFromFirebase("tommy");
+      name = firestoreService.getName();
+    };
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      body: const Center(
+      body: Center(
         child: SizedBox(
           width: 400,
           child: Card(
-            child: SignUpForm(),
+            child: Text(name),
           ),
         ),
       ),
@@ -34,66 +73,17 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
-
-  @override
-  State<SignUpForm> createState() => _SignUpFormState();
-}
-
-class _SignUpFormState extends State<SignUpForm> {
-  final _firstNameTextController = TextEditingController();
-  final _lastNameTextController = TextEditingController();
-  final _usernameTextController = TextEditingController();
-
-  double _formProgress = 0;
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LinearProgressIndicator(value: _formProgress),
-          Text('Sign up', style: Theme.of(context).textTheme.headlineMedium),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextFormField(
-              controller: _firstNameTextController,
-              decoration: const InputDecoration(hintText: 'First name'),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextFormField(
-              controller: _lastNameTextController,
-              decoration: const InputDecoration(hintText: 'Last name'),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextFormField(
-              controller: _usernameTextController,
-              decoration: const InputDecoration(hintText: 'Username'),
-            ),
-          ),
-          TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                return states.contains(MaterialState.disabled)
-                    ? null
-                    : Colors.white;
-              }),
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                return states.contains(MaterialState.disabled)
-                    ? null
-                    : Colors.blue;
-              }),
-            ),
-            onPressed: null,
-            child: const Text('Sign up'),
-          ),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Text(
+          'Welcome!',
+          style: Theme.of(context).textTheme.displayMedium,
+        ),
       ),
     );
   }
