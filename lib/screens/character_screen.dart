@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:inspector/models/character.dart";
 
 class CharacterScreen extends StatelessWidget {
+  static const routeName = '/character';
   final Character character;
 
   CharacterScreen({
@@ -13,12 +14,10 @@ class CharacterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          children: [
-            Text(character.name),
-            Text(character.level.toString()),
-          ]
-        ),
+        child: Column(children: [
+          Text(character.name),
+          Text(character.level.toString()),
+        ]),
       ),
     );
   }

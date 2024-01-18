@@ -4,10 +4,13 @@ import 'package:inspector/models/character.dart';
 class Player {
   final String id;
   final String name;
-  final String character;
-  final List<Character> characters = [];
+  List<Character> characters;
 
-  Player({required this.id, required this.character, required this.name});
+  Player({
+    required this.id,
+    required this.name,
+    this.characters = const [],
+  });
 
   void addCharacter(Character character) {
     characters.add(character);
@@ -25,7 +28,6 @@ class Player {
     return Player(
       id: id,
       name: "",
-      character: "",
     );
   }
 
@@ -37,15 +39,34 @@ class Player {
     return Player(
       id: snapshot.id,
       name: data?['name'] ?? '-no name-',
-      character: data?['character'] ?? '-no character-',
+      characters: _charactersFromJson(data?['characters']),
     );
+  }
+
+  static List<Character> _charactersFromJson(Map<String, dynamic> json) {
+    return json.entries
+        .map((character) => Character.fromJson(character.value))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "character": character,
       "name": name,
+      "characters": charactersToJson(characters),
     };
+  }
+
+  static Map<String, dynamic> charactersToJson(List<Character> characters) {
+    return Map.fromIterable(
+      characters.map(
+        (character) => {
+          character.name: {
+            "job": character.job,
+            "level": character.level,
+          }
+        },
+      ),
+    );
   }
 }

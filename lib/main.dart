@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:inspector/firebase_options.dart';
+import 'package:inspector/screens/character_screen.dart';
 import 'package:inspector/screens/login_screen.dart';
 import 'package:inspector/screens/player_list_screen.dart';
 import 'package:inspector/screens/splash_screen.dart';

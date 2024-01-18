@@ -1,9 +1,12 @@
 import 'dart:core';
 
+import 'package:inspector/models/item.dart';
+
 class Character {
   final String name;
   final int level;
   final String job;
+  List<Item>? items;
 
   Character({
     required this.name,

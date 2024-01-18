@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:inspector/models/character.dart';
 import 'package:inspector/models/player.dart';
 import 'package:inspector/screens/login_screen.dart';
+import 'package:inspector/screens/player_screen.dart';
 import 'package:inspector/services/firestore_service.dart';
 
 class PlayerListScreen extends StatelessWidget {
@@ -35,9 +34,9 @@ class PlayerListScreen extends StatelessWidget {
                   stream: FirestoreService.readPlayers(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                      //} else if (snapshot.data == null) {
-                      //  return Center(child: Text("Data is null"));
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.data == null) {
+                      return const Center(child: Text("Data is null"));
                     } else if (snapshot.data!.isEmpty) {
                       return const Center(child: Text("No Data"));
                     }
@@ -46,25 +45,21 @@ class PlayerListScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Column(
                         children: players!.map((player) {
-                          return ListTile(
-                            leading: IconButton(
-                              onPressed: () {
-                                FirestoreService.deletePlayer(player.id);
-                              },
-                              icon: const Icon(Icons.delete),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PlayerScreen(id: player.id),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              child: ListTile(
+                                title: Text(player.name),
+                              ),
                             ),
-                            trailing: IconButton(
-                              onPressed: () {
-                                FirestoreService.updatePlayer(Player(
-                                    id: player.id,
-                                    character: "ReturnOfJack",
-                                    name: "Daniel"));
-                              },
-                              icon: const Icon(Icons.update),
-                            ),
-                            title: Text(player.id),
-                            subtitle:
-                                Text("${player.name} - ${player.character}"),
                           );
                         }).toList(),
                       ),

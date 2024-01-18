@@ -41,8 +41,8 @@ class FirestoreService {
 
     final newPlayer = Player(
       id: id,
-      character: '-none-',
       name: '-none-',
+      characters: [],
     );
 
     playerCollection.doc(id).set(newPlayer.toJson());
@@ -58,13 +58,25 @@ class FirestoreService {
         .toList());
   }
 
+  static Stream<Player> readPlayer(String id) {
+    final playerCollection = FirebaseFirestore.instance.collection("players");
+
+    Stream<List<Player>> playerList = playerCollection.snapshots().map(
+        (querySnapshot) => querySnapshot.docs
+            .map((player) => Player.fromFirestore(player, null))
+            .toList());
+
+    return playerList
+        .map((players) => players.firstWhere((player) => player.id == id));
+  }
+
   static updatePlayer(Player player) {
     final playerCollection = FirebaseFirestore.instance.collection("players");
 
     final playerJson = Player(
-      character: player.character,
       name: player.name,
       id: player.id,
+      characters: player.characters,
     ).toJson();
 
     playerCollection.doc(player.id).update(playerJson);
