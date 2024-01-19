@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inspector/models/player.dart';
 import 'package:inspector/screens/login_screen.dart';
-import 'package:inspector/screens/player_screen.dart';
+import 'package:inspector/screens/player_screen/player_screen.dart';
 import 'package:inspector/services/firestore_service.dart';
 
 class PlayerListScreen extends StatelessWidget {
@@ -26,8 +26,8 @@ class PlayerListScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () => FirestoreService.createPlayer([]),
-                child: const Text("Create Data"),
+                onPressed: () => FirestoreService.createPlayer(),
+                child: const Text('Create Data'),
               ),
               const SizedBox(height: 10),
               StreamBuilder<List<Player>>(
@@ -36,9 +36,9 @@ class PlayerListScreen extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.data == null) {
-                      return const Center(child: Text("Data is null"));
+                      return const Center(child: Text('Data is null'));
                     } else if (snapshot.data!.isEmpty) {
-                      return const Center(child: Text("No Data"));
+                      return const Center(child: Text('No Data'));
                     }
                     final players = snapshot.data;
                     return Padding(
@@ -51,13 +51,13 @@ class PlayerListScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      PlayerScreen(id: player.id),
+                                      PlayerScreen(id: player.name ?? ''),
                                 ),
                               );
                             },
                             child: Card(
                               child: ListTile(
-                                title: Text(player.name),
+                                title: Text(player.name ?? ''),
                               ),
                             ),
                           );
@@ -71,7 +71,7 @@ class PlayerListScreen extends StatelessWidget {
                   FirebaseAuth.instance.signOut();
                   Navigator.pushNamed(context, LoginScreen.routeName);
                 },
-                child: const Text("Sign Out"),
+                child: const Text('Sign Out'),
               ),
             ],
           ),

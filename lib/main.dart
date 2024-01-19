@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:inspector/firebase_options.dart';
-import 'package:inspector/screens/character_screen.dart';
+import 'package:inspector/screens/character_creation_screen/character_creation_screen.dart';
 import 'package:inspector/screens/login_screen.dart';
 import 'package:inspector/screens/player_list_screen.dart';
 import 'package:inspector/screens/splash_screen.dart';
@@ -23,15 +24,16 @@ class InspectorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(
-          create: (_) => FirestoreService(),
-        )
+        StreamProvider<User?>.value(
+          value: FirebaseAuth.instance.authStateChanges(),
+          initialData: null,
+        ),
       ],
       child: MaterialApp(routes: {
-        '/': (context) => SplashScreen(child: LoginScreen()),
-        LoginScreen.routeName: (context) => LoginScreen(),
-        PlayerListScreen.routeName: (context) =>
-            PlayerListScreen(cname: "tommy"),
+        '/': (context) => const SplashScreen(child: LoginScreen()),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        CharacterCreationScreen.routeName: (context) =>
+            CharacterCreationScreen(),
       }),
     );
   }

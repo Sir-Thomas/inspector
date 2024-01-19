@@ -5,7 +5,7 @@ import 'package:inspector/models/player.dart';
 class FirestoreService {
   FirebaseFirestore? _instance;
 
-  Map<String, Player> _players = {};
+  final Map<String, Player> _players = {};
 
   Map<String, Player> getPlayers() {
     return _players;
@@ -27,21 +27,19 @@ class FirestoreService {
   }
 
   String getName() {
-    String name = "";
-    _players.forEach((id, Player) {
-      name = Player.getName();
+    String name = '';
+    _players.forEach((id, player) {
+      name = player.getName();
     });
     return name;
   }
 
-  static createPlayer(List<Character> characters) {
-    final playerCollection = FirebaseFirestore.instance.collection("players");
+  static createPlayer() {
+    final playerCollection = FirebaseFirestore.instance.collection('players');
 
     String id = playerCollection.doc().id;
 
     final newPlayer = Player(
-      id: id,
-      name: '-none-',
       characters: [],
     );
 
@@ -49,9 +47,8 @@ class FirestoreService {
   }
 
   static Stream<List<Player>> readPlayers() {
-    final playerCollection = FirebaseFirestore.instance.collection("players");
+    final playerCollection = FirebaseFirestore.instance.collection('players');
 
-    //return Stream.value(["1", "2", "3"]);
     return playerCollection.snapshots().map((querySnapshot) => querySnapshot
         .docs
         .map((player) => Player.fromFirestore(player, null))
@@ -59,8 +56,14 @@ class FirestoreService {
   }
 
   static Stream<Player> readPlayer(String id) {
-    final playerCollection = FirebaseFirestore.instance.collection("players");
+    final playerCollection = FirebaseFirestore.instance.collection('players');
 
+    return playerCollection
+        .doc(id)
+        .snapshots()
+        .map((querySnapshot) => Player.fromFirestore(querySnapshot, null));
+    /*
+    // TODO - delete this if the rewritten one works okay
     Stream<List<Player>> playerList = playerCollection.snapshots().map(
         (querySnapshot) => querySnapshot.docs
             .map((player) => Player.fromFirestore(player, null))
@@ -68,22 +71,19 @@ class FirestoreService {
 
     return playerList
         .map((players) => players.firstWhere((player) => player.id == id));
+    */
   }
 
-  static updatePlayer(Player player) {
-    final playerCollection = FirebaseFirestore.instance.collection("players");
+  static updatePlayer(String id, Player player) {
+    final playerCollection = FirebaseFirestore.instance.collection('players');
 
-    final playerJson = Player(
-      name: player.name,
-      id: player.id,
-      characters: player.characters,
-    ).toJson();
+    final playerJson = player.toJson();
 
-    playerCollection.doc(player.id).update(playerJson);
+    playerCollection.doc(id).update(playerJson);
   }
 
   static deletePlayer(String id) {
-    final playerCollection = FirebaseFirestore.instance.collection("players");
+    final playerCollection = FirebaseFirestore.instance.collection('players');
 
     playerCollection.doc(id).delete();
   }
