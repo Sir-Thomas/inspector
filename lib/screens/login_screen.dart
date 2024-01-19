@@ -60,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: _passwordController,
                 hintText: 'Password',
                 isPasswordField: true,
+                onFieldSubmitted: (_) => _signIn(),
               ),
               const SizedBox(height: 30),
               Row(

@@ -65,7 +65,7 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
                     _obscureText ? Icons.visibility_off : Icons.visibility,
                     color: _obscureText ? Colors.grey : Colors.blue,
                   )
-                : const Text(""),
+                : const Text(''),
           ),
         ),
       ),

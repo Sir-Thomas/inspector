@@ -16,8 +16,8 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final FireBaseAuthService _auth = FireBaseAuthService();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -30,7 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Sign Up"),
+          title: const Text('Sign Up'),
         ),
         body: Center(
           child: Padding(
@@ -39,7 +39,7 @@ class _SignupScreenState extends State<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Sign Up",
+                  'Sign Up',
                   style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
@@ -47,14 +47,15 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 FormContainerWidget(
                   controller: _emailController,
-                  hintText: "Email",
+                  hintText: 'Email',
                   isPasswordField: false,
                 ),
                 const SizedBox(height: 10),
                 FormContainerWidget(
                   controller: _passwordController,
-                  hintText: "Password",
+                  hintText: 'Password',
                   isPasswordField: true,
+                  onFieldSubmitted: (_) => _signup(),
                 ),
                 const SizedBox(height: 30),
                 Row(
@@ -62,7 +63,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: _signup,
-                      child: const Text("Sign Up"),
+                      child: const Text('Sign Up'),
                     ),
                     const SizedBox(width: 15),
                     ElevatedButton(
@@ -75,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           (route) => false,
                         )
                       },
-                      child: const Text("Login"),
+                      child: const Text('Login'),
                     ),
                   ],
                 )
@@ -92,14 +93,14 @@ class _SignupScreenState extends State<SignupScreen> {
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
     if (user != null) {
-      showToast(message: "User Created Successfully");
+      showToast(message: 'User Created Successfully');
       Navigator.pushNamedAndRemoveUntil(
         context,
         PlayerListScreen.routeName,
         (route) => false,
       );
     } else {
-      showToast(message: "Failed to create user");
+      showToast(message: 'Failed to create user');
     }
   }
 }
