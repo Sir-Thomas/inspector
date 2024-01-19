@@ -34,7 +34,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         body: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -71,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
+                            builder: (context) => const LoginScreen(),
                           ),
                           (route) => false,
                         )

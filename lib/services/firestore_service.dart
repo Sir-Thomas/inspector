@@ -62,16 +62,6 @@ class FirestoreService {
         .doc(id)
         .snapshots()
         .map((querySnapshot) => Player.fromFirestore(querySnapshot, null));
-    /*
-    // TODO - delete this if the rewritten one works okay
-    Stream<List<Player>> playerList = playerCollection.snapshots().map(
-        (querySnapshot) => querySnapshot.docs
-            .map((player) => Player.fromFirestore(player, null))
-            .toList());
-
-    return playerList
-        .map((players) => players.firstWhere((player) => player.id == id));
-    */
   }
 
   static updatePlayer(String id, Player player) {
@@ -86,5 +76,11 @@ class FirestoreService {
     final playerCollection = FirebaseFirestore.instance.collection('players');
 
     playerCollection.doc(id).delete();
+  }
+
+  static removeCharacter(String playerID, String characterID) async {
+    var player = await readPlayer(playerID).first;
+    player.removeCharacter(characterID);
+    updatePlayer(playerID, player);
   }
 }

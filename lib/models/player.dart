@@ -22,6 +22,10 @@ class Player {
     return characters[0].name;
   }
 
+  void removeCharacter(String characterID) {
+    characters.removeWhere((character) => character.id == characterID);
+  }
+
   factory Player.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
@@ -47,7 +51,7 @@ class Player {
   static Map<String, dynamic> charactersToJson(List<Character> characters) {
     return {
       for (var character in characters)
-        character.name: {
+        character.id: {
           'name': character.name,
           'job': character.job,
           'level': character.level
