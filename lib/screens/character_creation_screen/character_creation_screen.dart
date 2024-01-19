@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:inspector/models/character.dart';
+import 'package:inspector/models/jobs.dart';
 import 'package:inspector/screens/player_screen/player_screen.dart';
 import 'package:inspector/services/firestore_service.dart';
 import 'package:inspector/widgets/autocomplete_container_widget.dart';
@@ -53,7 +54,9 @@ class _CharacterCreationScreenState extends State<CharacterCreationScreen> {
               ),
               const SizedBox(height: 30),
               AutocompleteContainerWidget(
-                  options: const ['Battle Mage', 'Buccaneer'],
+                  options: Jobs.values
+                      .map((job) => job.toFormattedString())
+                      .toList(),
                   onSelected: (job) {
                     setState(() {
                       _job = job;

@@ -23,12 +23,13 @@ class AutocompleteContainerWidget extends StatelessWidget {
       child: Autocomplete(
         key: fieldKey,
         optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return options.where((option) {
-            return option.contains(textEditingValue.text.toLowerCase());
-          });
+          return options.where(
+            (option) {
+              return option
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            },
+          );
         },
         onSelected: onSelected,
       ),
