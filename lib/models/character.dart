@@ -1,21 +1,22 @@
 import 'dart:core';
 
-import 'package:inspector/models/item.dart';
+import 'package:inspector/models/item_list.dart';
 
 class Character {
   String id;
   final String name;
   final int level;
   final String job;
-  List<Item>? items;
-  final String? image;
+  final ItemList? itemList;
+  final String? imageURL;
 
   Character({
     required this.id,
     required this.name,
     required this.level,
     required this.job,
-    this.image,
+    this.itemList,
+    this.imageURL,
   });
 
   factory Character.createID({
@@ -28,7 +29,7 @@ class Character {
       name: name,
       level: level,
       job: job,
-      image: '',
+      imageURL: '',
     );
   }
 
@@ -38,7 +39,7 @@ class Character {
       name: json['name'],
       level: json['level'],
       job: json['job'],
-      image: json['image'],
+      imageURL: json['image_url'],
     );
   }
 
@@ -49,7 +50,7 @@ class Character {
       'level': level,
       'job': job,
       // TODO - add this function 'items': items.toJson(),
-      'image': image,
+      'image_url': imageURL,
     };
   }
 }

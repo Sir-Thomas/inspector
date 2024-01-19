@@ -1,18 +1,20 @@
-class Item {
+abstract class Item {
   final String name;
   final ItemType type;
-  final ItemStats stats;
+  final ItemStats? stats;
   final ItemPotential? potential;
   final ItemFlame? flame;
   final ItemSoul? soul;
+  final String imageURL;
 
   Item({
     required this.name,
     required this.type,
-    required this.stats,
+    this.stats,
     this.potential,
     this.flame,
     this.soul,
+    required this.imageURL,
   });
 }
 

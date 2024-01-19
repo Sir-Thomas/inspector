@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inspector/models/character.dart';
 import 'package:inspector/screens/character_creation_screen/character_creation_screen.dart';
+import 'package:inspector/screens/player_screen/character_item_display.dart';
 import 'character_image.dart';
 
 class CharacterCard extends StatelessWidget {
@@ -11,21 +12,30 @@ class CharacterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CharacterImage(image: character.image),
-              const SizedBox(width: 8),
-              CharacterLabel(character: character),
-              const Spacer(),
-              IconButton(
-                onPressed: () => _editCharacter(context, character),
-                icon: const Icon(Icons.edit),
-              ),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    CharacterImage(image: character.imageURL),
+                    const SizedBox(width: 8),
+                    CharacterLabel(character: character),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                CharacterItemDisplay(character: character),
+                const Spacer(),
+                IconButton(
+                  onPressed: () => _editCharacter(context, character),
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

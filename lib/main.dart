@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:inspector/firebase_options.dart';
 import 'package:inspector/screens/character_creation_screen/character_creation_screen.dart';
 import 'package:inspector/screens/login_screen.dart';
-import 'package:inspector/screens/player_list_screen.dart';
 import 'package:inspector/screens/splash_screen.dart';
 import 'package:inspector/services/firestore_service.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +32,7 @@ class InspectorApp extends StatelessWidget {
         '/': (context) => const SplashScreen(child: LoginScreen()),
         LoginScreen.routeName: (context) => const LoginScreen(),
         CharacterCreationScreen.routeName: (context) =>
-            CharacterCreationScreen(),
+            const CharacterCreationScreen(),
       }),
     );
   }
